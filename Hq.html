@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LIGA DA INJUSTIÇA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body{
+    background:#0d0d0d;
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* LIVRO */
+
+.book{
+    position:relative;
+    width:100%;
+    max-width:500px;
+    height:100vh;
+    overflow:hidden;
+    background:black;
+}
+
+/* PÁGINAS */
+
+.page{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:100%;
+    transition:all 0.6s ease;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* PÁGINA ATUAL */
+
+.page.active{
+    left:0;
+    z-index:5;
+}
+
+/* PÁGINA SAINDO */
+
+.page.exit-left{
+    left:-100%;
+}
+
+.page.exit-right{
+    left:100%;
+}
+
+/* IMAGENS */
+
+.page img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:black;
+}
+
+/* CAPA */
+
+.cover{
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:30px;
+}
+
+.cover h1{
+    font-size:42px;
+    letter-spacing:3px;
+    text-shadow:0 0 15px white;
+}
+
+.cover p{
+    margin-top:20px;
+    opacity:0.7;
+    font-size:15px;
+}
+
+/* BOTÕES */
+
+.controls{
+    position:fixed;
+    bottom:20px;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:0 20px;
+    z-index:20;
+}
+
+button{
+    border:none;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    padding:14px 20px;
+    border-radius:50px;
+    backdrop-filter:blur(10px);
+    font-size:16px;
+    font-weight:bold;
+}
+
+button:active{
+    transform:scale(0.95);
+}
+
+/* INDICADOR */
+
+.page-number{
+    position:fixed;
+    top:15px;
+    right:15px;
+    color:white;
+    background:rgba(0,0,0,0.5);
+    padding:8px 14px;
+    border-radius:30px;
+    font-size:14px;
+    z-index:30;
+}
+
+</style>
+</head>
+<body>
+
+<div class="book">
+
+    <!-- CAPA -->
+    <div class="page active">
+        <div class="cover">
+            <h1>LIGA DA INJUSTIÇA</h1>
+            <p>autor Kzn🗽🇺🇸</p>
+        </div>
+    </div>
+
+    <!-- EPISÓDIOS -->
+    <div class="page">
+        <img src="imagem1.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem2.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem3.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem4.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem5.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem6.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem7.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem8.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem9.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem10.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem11.png">
+    </div>
+
+    <div class="page">
+        <img src="imagem12.png">
+    </div>
+
+</div>
+
+<!-- CONTROLES -->
+
+<div class="controls">
+    <button onclick="prevPage()">⬅</button>
+    <button onclick="nextPage()">➡</button>
+</div>
+
+<div class="page-number" id="pageNumber">
+    1 / 13
+</div>
+
+<script>
+
+const pages = document.querySelectorAll(".page");
+const pageNumber = document.getElementById("pageNumber");
+
+let currentPage = 0;
+
+/* MOSTRAR PÁGINA */
+
+function showPage(index, direction){
+
+    pages.forEach((page, i)=>{
+
+        page.classList.remove("active","exit-left","exit-right");
+
+        if(i < index){
+
+            page.classList.add("exit-left");
+
+        }
+
+        if(i > index){
+
+            page.classList.add("exit-right");
+
+        }
+
+    });
+
+    pages[index].classList.add("active");
+
+    pageNumber.innerText = (index + 1) + " / " + pages.length;
+
+}
+
+/* PRÓXIMA */
+
+function nextPage(){
+
+    if(currentPage < pages.length - 1){
+
+        currentPage++;
+
+        showPage(currentPage,"next");
+
+    }
+
+}
+
+/* VOLTAR */
+
+function prevPage(){
+
+    if(currentPage > 0){
+
+        currentPage--;
+
+        showPage(currentPage,"prev");
+
+    }
+
+}
+
+/* DESLIZAR COM O DEDO */
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener("touchstart",(e)=>{
+
+    touchStartX = e.changedTouches[0].screenX;
+
+});
+
+document.addEventListener("touchend",(e)=>{
+
+    touchEndX = e.changedTouches[0].screenX;
+
+    if(touchEndX < touchStartX - 50){
+
+        nextPage();
+
+    }
+
+    if(touchEndX > touchStartX + 50){
+
+        prevPage();
+
+    }
+
+});
+
+/* INICIAR */
+
+showPage(currentPage);
+
+</script>
+
+</body>
+</html>
